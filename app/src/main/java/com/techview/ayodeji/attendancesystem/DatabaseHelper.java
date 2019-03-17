@@ -20,12 +20,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTERGER PRIMARY KEY AUTOINCREMENT,Fname TEXT,Staffid TEXT,Department TEXT,Password TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,Fname TEXT,Staffid TEXT,Department TEXT,Password TEXT)");
 
     }
     @Override
     public void  onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME); //Drop older table if exists
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); //Drop older table if exists
         onCreate(db);
     }
 }

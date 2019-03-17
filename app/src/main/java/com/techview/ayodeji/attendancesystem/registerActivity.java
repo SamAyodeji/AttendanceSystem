@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +15,6 @@ import android.widget.Toast;
 
 public class registerActivity extends AppCompatActivity {
 
-    //DatabaseHelper mDatabaseHelper;
-    SQLiteOpenHelper openHelper;
     SQLiteDatabase db;
      EditText fullname, staffID,Department, Spassword;
      Button register;
@@ -24,7 +24,7 @@ public class registerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        openHelper= new DatabaseHelper(this);
+        db= (new DatabaseHelper(this)).getWritableDatabase();
 
         fullname = (EditText)findViewById(R.id.fname);
         staffID = (EditText)findViewById(R.id.staffId);
@@ -36,12 +36,30 @@ public class registerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                db= openHelper.getWritableDatabase();
                 String fname = fullname.getText().toString();
                 String staff = staffID.getText().toString();
                 String dp = Department.getText().toString();
                 String pass = Spassword.getText().toString();
+                //Validation
+                if(TextUtils.isEmpty(fname)){
+                    fullname.setError("Fullname is Empty"); return;
+                }
+
+                if(TextUtils.isEmpty(staff)){
+                    staffID.setError("Staff Id is Empty"); return;
+                }
+
+                if(TextUtils.isEmpty(dp)){
+                    Department.setError("Department is Empty"); return;
+                }
+
+                if(TextUtils.isEmpty(pass)){
+                    Spassword.setError("Password is Empty"); return;
+                }
+
+
                 insertdata(fname,staff,dp,pass);
+                Toast.makeText(getApplicationContext(), "register successfully",Toast.LENGTH_LONG).show();
                 //Toast.makeText(getApplicationContext(), "register successfully",Toast.LENGTH_LONG).show();
 
             }
@@ -55,20 +73,6 @@ public class registerActivity extends AppCompatActivity {
         contentValues.put(DatabaseHelper.COL3, staff);
         contentValues.put(DatabaseHelper.COL4, dp);
         contentValues.put(DatabaseHelper.COL5, pass);
-        long id = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
-        if(id<=0)
-        {
-
-            Toast.makeText(getApplicationContext(), "register successfully",Toast.LENGTH_LONG).show();
-            //Message.message(getApplicationContext(),"Insertion Unsuccessful");
-            //fullname.setText();
-            //staffID.setText();
-        } else
-        {
-            Toast.makeText(getApplicationContext(), "register unsuccessfully",Toast.LENGTH_LONG).show();
-           // Message.message(getApplicationContext(),"Insertion Successful");
-            //Name.setText("");
-            //Pass.setText("");
-        }
+        db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
     }
 }
