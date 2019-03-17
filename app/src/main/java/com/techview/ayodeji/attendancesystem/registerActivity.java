@@ -58,21 +58,22 @@ public class registerActivity extends AppCompatActivity {
                 }
 
 
-                insertdata(fname,staff,dp,pass);
-                Toast.makeText(getApplicationContext(), "register successfully",Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(), "register successfully",Toast.LENGTH_LONG).show();
-
+                long response = insertdata(fname,staff,dp,pass);
+                if(response != -1)
+                    Toast.makeText(getApplicationContext(), "register successfully",Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(getApplicationContext(), "An Error Occurred...",Toast.LENGTH_LONG).show();
             }
         });
         //openHelper = new DataBaseHelper(this);
         //mDatabaseHelper = new DatabaseHelper(this);
     }
-    public void  insertdata(String fname,String staff,String dp,String pass){
+    public long  insertdata(String fname,String staff,String dp,String pass){
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.COL2, fname);
         contentValues.put(DatabaseHelper.COL3, staff);
         contentValues.put(DatabaseHelper.COL4, dp);
         contentValues.put(DatabaseHelper.COL5, pass);
-        db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
+        return db.insert(DatabaseHelper.TABLE_NAME, null, contentValues);
     }
 }
